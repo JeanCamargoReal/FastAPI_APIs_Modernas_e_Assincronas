@@ -28,12 +28,28 @@ async def get_curso(curso_id: int):
 
 
 @app.post("/cursos", status_code=status.HTTP_201_CREATED)
-async def pos_curso(curso: Curso):
+async def post_curso(curso: Curso):
     next_id: int = len(cursos) + 1
     cursos[next_id] = dict(curso)
-    del curso.id
+    cursos[next_id]["id"] = next_id
 
     return curso
+
+
+@app.put("/cursos/{curso_id}")
+async def put_curso(curso_id: int, curso: Curso):
+    if curso_id in cursos:
+        cursos[curso_id] = dict(curso)
+        curso.id = curso_id
+        cursos[curso_id]["id"] = int(curso_id)
+
+        return curso
+
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404,
+            detail=f"Não existe um curso com o id {curso_id}",
+        )
 
 
 if __name__ == "__main__":
