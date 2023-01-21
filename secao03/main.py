@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, status
+from models import Curso
 
 app = FastAPI()
 
@@ -24,6 +25,15 @@ async def get_curso(curso_id: int):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado."
         )
+
+
+@app.post("/cursos", status_code=status.HTTP_201_CREATED)
+async def pos_curso(curso: Curso):
+    next_id: int = len(cursos) + 1
+    cursos[next_id] = dict(curso)
+    del curso.id
+
+    return curso
 
 
 if __name__ == "__main__":
