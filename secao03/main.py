@@ -1,8 +1,8 @@
 from time import sleep
-from typing import Any
+from typing import Any, List
 
 from fastapi import Depends, FastAPI, HTTPException, Path, Response, status
-from models import Curso
+from models import Curso, cursos
 
 
 def fake_db():
@@ -14,15 +14,18 @@ def fake_db():
         sleep(1)
 
 
-app = FastAPI()
-
-cursos = {
-    1: {"titulo": "Programação para leigos", "aulas": 112, "horas": 58},
-    2: {"titulo": "Algoritmois e lógica de programação", "aulas": 87, "horas": 67},
-}
+app = FastAPI(
+    title="API de Cursos", version="0.0.1", description="Uma API para estudo do FastAPI"
+)
 
 
-@app.get("/cursos")
+@app.get(
+    "/cursos",
+    description="Retorna todos os cursos ou uma lista vazia.",
+    summary="Retorna todos os cursos",
+    response_model=List[Curso],
+    response_description="Cursos encontrados com sucesso.",
+)
 async def get_cursos(db: Any = Depends(fake_db)):
     return cursos
 
@@ -51,7 +54,7 @@ async def get_curso(
         )
 
 
-@app.post("/cursos", status_code=status.HTTP_201_CREATED)
+@app.post("/cursos", status_code=status.HTTP_201_CREATED, response_model=Curso)
 async def post_curso(curso: Curso, db: Any = Depends(fake_db)):
     next_id: int = len(cursos) + 1
     cursos[next_id] = dict(curso)

@@ -8,3 +8,9 @@ class Curso(BaseModel):
     titulo: str
     aulas: int
     horas: int
+
+
+cursos = [
+    Curso(id=1, titulo="Programação para leitos", aulas=43, horas=56),
+    Curso(id=2, titulo="Algoritmos e lógica de programação", aulas=52, horas=66),
+]
