@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 # POST curso
-@router.post("/", status_code=status.http_201_CREATED, response_model=CursoSchema)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CursoSchema)
 async def post_curso(curso: CursoSchema, db: AsyncSession = Depends(get_session)):
     novo_curso = CursoModel(titulo=curso.titulo, aulas=curso.aulas, horas=curso.horas)
 
